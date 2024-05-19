@@ -14,30 +14,49 @@ import java.util.Optional;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
     
     @Autowired
     public UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
-
- 
         List<User> users = new ArrayList<User>();
-        userRepository.findAll().forEach(users::add);;
+        userRepository.findAll().forEach(users::add);
 
         if (users.isEmpty()) {
             return new ResponseEntity<>(null,HttpStatus.OK);
           }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-             
- 
+        return new ResponseEntity<>(users,HttpStatus.OK);
     }
-/*
+
+    @GetMapping("/users/byLastName/{lastName}")
+    public ResponseEntity<List<User>> getAllUsersByName(@PathVariable String lastName) {
+        List<User> users = new ArrayList<User>();
+        userRepository.findByLastName(lastName).forEach(users::add);
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(null,HttpStatus.OK);
+          }
+        return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+
+    @GetMapping("/users/byAge/{age}")
+    public ResponseEntity<List<User>> getAllUsersByAge(@PathVariable Integer age) {
+        List<User> users = new ArrayList<User>();
+        userRepository.findByAge(age).forEach(users::add);
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(null,HttpStatus.OK);
+          }
+        return new ResponseEntity<>(users,HttpStatus.OK);
+    }
+
     @GetMapping("/{country}/{userEmail}")
     public ResponseEntity<User> getUserById(@PathVariable String country, @PathVariable String userEmail) {
-        Optional<User> optionalUser = userRepository.findById(new UserPrimaryKey(country, userEmail));
+        UserPrimaryKey pk = new UserPrimaryKey(country, userEmail);
+        Optional<User> optionalUser = userRepository.findById(pk);
         return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -68,5 +87,5 @@ public class UserController {
         userRepository.deleteById(new UserPrimaryKey(country, userEmail));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    */
+
 }
