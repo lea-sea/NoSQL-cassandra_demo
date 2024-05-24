@@ -3,31 +3,26 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const App = () => {
+const AppDemo = () => {
   const [userData, setUserData] = useState([]);
   const [singleUserData, setSingleUserData] = useState();
   const [loading, setLoading] = useState(false);
-  const [country, setCountry] = useState('');
+  const [creationDate, setCreationDate] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [name, setName] = useState('');
-  const [age, setAge] = useState('');
 
   useEffect(() => {
     if (singleUserData) {
-      setCountry(singleUserData.primaryKey.country);
+      setCreationDate(singleUserData.primaryKey.creationDate);
       setUserEmail(singleUserData.primaryKey.userEmail);
-      setFirstName(singleUserData.firstName);
-      setLastName(singleUserData.lastName);
-      setAge(singleUserData.age);
+      setName(singleUserData.name);
     }
   }, [singleUserData]);
 
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('api/users');
+      const response = await axios.get('api-demo/users');
       setUserData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -38,18 +33,7 @@ const App = () => {
   const loadUsersByName = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`api/users/byLastName/${name}`);
-      setUserData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-    setLoading(false);
-  };
-
-  const loadUsersByAge = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`api/users/byAge/${age}`);
+      const response = await axios.get(`api-demo/users/byName/${name}`);
       setUserData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -60,7 +44,7 @@ const App = () => {
   const loadSingleUser = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`api/${country}/${userEmail}`);
+      const response = await axios.get(`api-demo/${userEmail}/${creationDate}`);
       setSingleUserData(response.data)
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -70,7 +54,7 @@ const App = () => {
 
   const createUser = async (userData) => {
     try {
-      const response = await axios.post('api', userData);
+      const response = await axios.post('api-demo', userData);
       console.log('Data saved successfully:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -79,7 +63,7 @@ const App = () => {
 
   const updateUser = async (userData) => {
     try {
-      const response = await axios.put(`api/${country}/${userEmail}`, userData);
+      const response = await axios.put(`api-demo/${userEmail}/${creationDate}`, userData);
       console.log('Data saved successfully:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -88,7 +72,7 @@ const App = () => {
 
   const deleteUser = async () => {
     try {
-      const response = await axios.delete(`api/${country}/${userEmail}`);
+      const response = await axios.delete(`api-demo/${userEmail}/${creationDate}`);
       console.log('Data deleted successfully:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -98,12 +82,10 @@ const App = () => {
   const handleSubmitCreate = async () => {
     const userData = {
       primaryKey: {
-        country: country,
+        creationDate: new Date(creationDate).toISOString(),
         userEmail: userEmail,
       },
-      firstName: firstName,
-      lastName: lastName,
-      age: age,
+      name: name,
     };
     await createUser(userData);
   };
@@ -111,12 +93,10 @@ const App = () => {
   const handleSubmitUpdate = async () => {
     const userData = {
       primaryKey: {
-        country: country,
+        creationDate: new Date(creationDate).toISOString(),
         userEmail: userEmail,
       },
-      firstName: firstName,
-      lastName: lastName,
-      age: age,
+      name: name,
     };
     await updateUser(userData);
   };
@@ -128,7 +108,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1 className="text-center my-4">User</h1>
+      <h1 className="text-center my-4">UserDemo</h1>
       <div className="d-flex justify-content-center mb-4">
         <button onClick={loadSingleUser} disabled={loading} className="btn btn-primary mx-2">
           {loading ? 'Loading...' : 'Fetch single User'}
@@ -147,10 +127,10 @@ const App = () => {
         <form>
           <div className="form-group row m-2">
             <label htmlFor="country" className="col-sm-2 col-form-label font-weight-bold text-danger">
-              Country*:
+              CreatedDate*:
             </label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="country" value={country} onChange={(e) => setCountry(e.target.value)} required />
+              <input type="datetime-local" className="form-control" id="country" value={creationDate} onChange={(e) => setCreationDate(e.target.value)} required />
             </div>
           </div>
           <div className="form-group row m-2">
@@ -162,21 +142,9 @@ const App = () => {
             </div>
           </div>
           <div className="form-group row m-2">
-            <label htmlFor="firstName" className="col-sm-2 col-form-label">First Name:</label>
+            <label htmlFor="name" className="col-sm-2 col-form-label">Name:</label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-            </div>
-          </div>
-          <div className="form-group row m-2">
-            <label htmlFor="lastName" className="col-sm-2 col-form-label">Last Name:</label>
-            <div className="col-sm-10">
-              <input type="text" className="form-control" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-            </div>
-          </div>
-          <div className="form-group row m-2">
-            <label htmlFor="age" className="col-sm-2 col-form-label">Age:</label>
-            <div className="col-sm-10">
-              <input type="number" className="form-control" id="age" value={age} onChange={(e) => setAge(e.target.value)} />
+              <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
           </div>
         </form>
@@ -196,24 +164,13 @@ const App = () => {
       <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} />
     </div>
   </div>
-  <div className="w-5"></div> {/* Abstand */}
-  <div className="d-flex flex-column align-items-center w-50 m-4">
-    <button onClick={loadUsersByAge} disabled={loading} className="btn btn-primary mb-2 w-100">
-      {loading ? 'Loading...' : 'Fetch all Users By Age (Filtering not Allowed)'}
-    </button>
-    <div className="form-group w-100">
-      <label htmlFor="ageFilter" className="font-weight-bold text-danger">Age:</label>
-      <input type="number" className="form-control" id="ageFilter" value={age} onChange={(e) => setAge(e.target.value)} />
-    </div>
-  </div>
 </div>
       <ul className="list-group m-4">
         {userData ? userData.map((user) => (
-          <li key={user.primaryKey.userEmail} className="list-group-item">
-            <p>Name: {user.firstName} {user.lastName}</p>
-            <p>Age: {user.age}</p>
+          <li key={user.primaryKey.creationDate} className="list-group-item">
+            <p>Name: {user.name}</p>
             <p>Email: {user.primaryKey.userEmail}</p>
-            <p>Country: {user.primaryKey.country}</p>
+            <p>CreatedDate: {user.primaryKey.creationDate}</p>
           </li>
         )) : ""}
       </ul>
@@ -222,4 +179,4 @@ const App = () => {
 
 };
 
-export default App;
+export default AppDemo;
