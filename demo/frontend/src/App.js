@@ -187,36 +187,50 @@ const App = () => {
         </button>
       </div>
       <div className="d-flex justify-content-center">
-  <div className="d-flex flex-column align-items-center w-50 m-4">
-    <button onClick={loadUsersByName} disabled={loading} className="btn btn-primary mb-2 w-100">
-      {loading ? 'Loading...' : 'Fetch all Users By Name (Filtering allowed)'}
-    </button>
-    <div className="form-group w-100">
-      <label htmlFor="name" className="font-weight-bold text-danger">Name:</label>
-      <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-    </div>
-  </div>
-  <div className="w-5"></div> {/* Abstand */}
-  <div className="d-flex flex-column align-items-center w-50 m-4">
-    <button onClick={loadUsersByAge} disabled={loading} className="btn btn-primary mb-2 w-100">
-      {loading ? 'Loading...' : 'Fetch all Users By Age (Filtering not Allowed)'}
-    </button>
-    <div className="form-group w-100">
-      <label htmlFor="ageFilter" className="font-weight-bold text-danger">Age:</label>
-      <input type="number" className="form-control" id="ageFilter" value={age} onChange={(e) => setAge(e.target.value)} />
-    </div>
-  </div>
-</div>
-      <ul className="list-group m-4">
-        {userData ? userData.map((user) => (
-          <li key={user.primaryKey.userEmail} className="list-group-item">
-            <p>Name: {user.firstName} {user.lastName}</p>
-            <p>Age: {user.age}</p>
-            <p>Email: {user.primaryKey.userEmail}</p>
-            <p>Country: {user.primaryKey.country}</p>
-          </li>
-        )) : ""}
-      </ul>
+        <div className="d-flex flex-column align-items-center w-50 m-4">
+          <button onClick={loadUsersByName} disabled={loading} className="btn btn-primary mb-2 w-100">
+            {loading ? 'Loading...' : 'Fetch all Users By Lastname (Filtering allowed)'}
+          </button>
+          <div className="form-group w-100">
+            <label htmlFor="name" className="font-weight-bold text-danger">Lastname:</label>
+            <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+        </div>
+        <div className="w-5"></div> {/* Abstand */}
+        <div className="d-flex flex-column align-items-center w-50 m-4">
+          <button onClick={loadUsersByAge} disabled={loading} className="btn btn-primary mb-2 w-100">
+            {loading ? 'Loading...' : 'Fetch all Users By Age (Filtering not Allowed)'}
+          </button>
+          <div className="form-group w-100">
+            <label htmlFor="ageFilter" className="font-weight-bold text-danger">Age:</label>
+            <input type="number" className="form-control" id="ageFilter" value={age} onChange={(e) => setAge(e.target.value)} />
+          </div>
+        </div>
+      </div>
+      {userData.length > 0 ? 
+      <table className="table table-striped m-4">
+        <thead>
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Age</th>
+            <th scope="col" className='font-weight-bold text-danger'>Email</th>
+            <th scope="col" className='font-weight-bold text-danger'>Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userData.length > 0 ? userData.map((user) => (
+            <tr key={user.primaryKey.userEmail}>
+              <td>{user.firstName}</td>
+              <td>{user.lastName}</td>
+              <td>{user.age}</td>
+              <td>{user.primaryKey.userEmail}</td>
+              <td>{user.primaryKey.country}</td>
+            </tr>
+          )) : <tr><td colSpan="5" className="text-center">No data available</td></tr>}
+        </tbody>
+      </table>
+      : "" }
     </div>
   );
 

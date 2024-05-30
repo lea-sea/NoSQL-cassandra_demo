@@ -165,15 +165,26 @@ const AppDemo = () => {
     </div>
   </div>
 </div>
-      <ul className="list-group m-4">
-        {userData ? userData.map((user) => (
-          <li key={user.primaryKey.creationDate} className="list-group-item">
-            <p>Name: {user.name}</p>
-            <p>Email: {user.primaryKey.userEmail}</p>
-            <p>CreatedDate: {user.primaryKey.creationDate}</p>
-          </li>
-        )) : ""}
-      </ul>
+  {userData.length > 0  ? 
+    <table className="table table-striped m-4">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col" className='font-weight-bold text-danger'>Email</th>
+          <th scope="col" className='font-weight-bold text-danger'>CreatedDate</th>
+        </tr>
+      </thead>
+      <tbody>
+        {userData.length > 0 ? userData.map((user) => (
+          <tr key={user.primaryKey.creationDate}>
+            <td>{user.name}</td>
+            <td>{user.primaryKey.userEmail}</td>
+            <td>{user.primaryKey.creationDate}</td>
+          </tr>
+        )) : <tr><td colSpan="5" className="text-center">No data available</td></tr>}
+      </tbody>
+    </table>
+  : "" }
     </div>
   );
 
