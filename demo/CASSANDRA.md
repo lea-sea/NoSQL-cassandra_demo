@@ -11,13 +11,13 @@ SELECT * FROM learn_cassandra.users_by_country_with_leveled_compaction;
 
 ### Hinzufügen neuer Zeilen : Insert/Update (keine Unterscheidung)
 ### Neue Zeile hinzufügen (normal)
-INSERT INTO learn_cassandra.users_by_country_with_leveled_compaction (country,user_email,firstname,lastname, age) VALUES('DE','sebastian@example.com', 'Sebastian', 'Müller', 12); 
+INSERT INTO learn_cassandra.users_by_country_with_leveled_compaction (country,user_email,firstname,lastname, age) VALUES('DE','sebastian@example.com', 'Sebastian', 'Mueller', 12); 
 
 ### Diese neue Zeile Aktualisieren (normal)
 UPDATE learn_cassandra.users_by_country_with_leveled_compaction SET firstname = 'Sebastian Updated with Update', lastname = 'Müller Updated with Update' WHERE country = 'DE' AND user_email = 'sebastian@example.com';
 
 ### Aktualisieren mit INSERT(!)
-INSERT INTO learn_cassandra.users_by_country_with_leveled_compaction (country,user_email,firstname,lastname, age) VALUES('DE','sebastian@example.com', 'Sebastian Updated with Insert', 'Müller Updated with Insert', 12);
+INSERT INTO learn_cassandra.users_by_country_with_leveled_compaction (country,user_email,firstname,lastname, age) VALUES('DE','sebastian@example.com', 'Sebastian Updated with Insert', 'Mueller Updated with Insert', 12);
 
 ### Hinzufügen durch UPDATE(!)
 UPDATE learn_cassandra.users_by_country_with_leveled_compaction SET firstname = 'Bob Inserted with Update', lastname = 'Bauer Inserted  with Update', age = 4 WHERE country = 'DE' AND user_email = 'bob@example.com';
@@ -43,7 +43,7 @@ SELECT * FROM learn_cassandra.users_by_country_with_leveled_compaction
 ### Cluster/Container erstellen und starten über Docker:
 docker run --name cassandra-demo-1 -p 9042:9042 -d cassandra:3.7 
 
-### Existierenden Cassandra-Container starten (bezogen auf cassandra-1-Container, bei dem gerade erstellten wäre es cassandra-demo)
+### Existierenden Cassandra-Container starten 
 docker start cassandra-demo-1 
 
 ### Existierenden Cassandra-Container löschen (mit allen Daten)
@@ -137,8 +137,8 @@ APPLY BATCH;
 
 ### 
 SELECT * FROM demo_cassandra.todo_by_user_email;
-SELECT * FROM learn_cassandra.todos_shared_by_source_user_email;
-SELECT * FROM learn_cassandra.todos_shared_by_target_user_email;
+SELECT * FROM demo_cassandra.todos_shared_by_source_user_email;
+SELECT * FROM demo_cassandra.todos_shared_by_target_user_email;
 
 ### Noch einpaar Daten zum weiter befüllen:
 INSERT INTO demo_cassandra.todo_by_user_email (user_email,creation_date,name) VALUES('bob@email.com', '2024-05-20T16:10:00', 'My first todo entry');

@@ -16,10 +16,10 @@ public class UserPrimaryKeyDemo implements Serializable {
         this.creationDate = creationDate;
     }
 
-    @PrimaryKeyColumn(name = "creation_date", type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "creation_date", type = PrimaryKeyType.CLUSTERED)
     private LocalDateTime creationDate;
 
-    @PrimaryKeyColumn(name = "user_email", ordinal = 0, type = PrimaryKeyType.CLUSTERED)
+    @PrimaryKeyColumn(name = "user_email", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String userEmail;
 
     // Constructors, getters, and setters
